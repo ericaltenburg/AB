@@ -1,0 +1,196 @@
+\documentclass[preprint,11pt,3p]{article}
+
+\usepackage{tocloft}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{amsmath} 
+\usepackage{tikz} 
+\usepackage{epigraph}
+\usepackage{lipsum} 
+\usepackage{indentfirst}
+\usepackage[strings]{underscore}
+
+\usepackage{listings}
+\usepackage{color}
+
+\colorlet{light-gray}{gray!10}
+\definecolor{javared}{rgb}{0.6,0,0} % for strings
+\definecolor{javagreen}{rgb}{0.25,0.5,0.35} % comments
+\definecolor{javapurple}{rgb}{0.5,0,0.35} % keywords
+\definecolor{javadocblue}{rgb}{0.25,0.35,0.75} % javadoc
+\definecolor{main-color}{rgb}{0.6627, 0.7176, 0.7764}
+\definecolor{back-color}{rgb}{0.1686, 0.1686, 0.1686}
+\definecolor{string-color}{rgb}{0.3333, 0.5254, 0.345}
+\definecolor{key-color}{rgb}{0.8, 0.47, 0.196}
+\definecolor{asparagus}{rgb}{0.53, 0.66, 0.42}
+\definecolor{azure(colorwheel)}{rgb}{0.0, 0.5, 1.0}
+\definecolor{ashgrey}{rgb}{0.7, 0.75, 0.71}
+
+\definecolor{shadecolor}{RGB}{150,150,150}
+
+\lstset{
+  language=Java,
+basicstyle=\small\ttfamily,
+keywordstyle=\color{javapurple}\bfseries,
+stringstyle=\color{javared},
+    keywordstyle = {\color{javapurple}},
+    keywordstyle = [2]{\color{asparagus}},
+    keywordstyle = [3]{\color{azure(colorwheel)}},
+    keywordstyle = [4]{\color{teal}},
+    otherkeywords = {:,@@,|,->,>>=,val},
+    morekeywords = [2]{;,:,*,@@},
+    morekeywords = [3]{->,|},
+    morekeywords = [4]{>>=},
+commentstyle=\color{javagreen},
+morecomment=[s][\color{javadocblue}]{(*}{*)},
+numbers=left,
+numberstyle=\tiny\color{black},
+stepnumber=2,
+numbersep=10pt,
+tabsize=2,
+showspaces=false,
+showstringspaces=false,
+escapeinside={(*@}{@*)},
+% frame=single,
+backgroundcolor=\color{light-gray},
+frame=lines,
+breaklines=true,
+postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}}
+
+
+\renewcommand\epigraphflush{flushright}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.7\textwidth}
+\renewcommand{\abstractname}{Executive Summary}
+
+\definecolor{titlepagecolor}{cmyk}{1,.60,0,.40}
+
+\DeclareFixedFont{\titlefont}{T1}{ppl}{b}{it}{0.5in}
+
+\makeatletter                       
+\def\printauthor{%                  
+    {\large \@author}}              
+\makeatother
+\author{%
+    Eric Altenburg \\
+    \texttt{ealtenx@gmail.com}
+    }
+
+% The following code is borrowed from: https://tex.stackexchange.com/a/86310/10898
+
+\newcommand\titlepagedecoration{%
+\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+
+	\coordinate (aux1) at ([yshift=-15pt]current page.north east);
+	\coordinate (aux2) at ([yshift=-410pt]current page.north east);
+	\coordinate (aux3) at ([xshift=-4.5cm]current page.north east);
+	\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+
+	\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+		\draw
+		  (aux1) -- coordinate (a)
+		  ++(225:5) --
+		  ++(-45:5.1) coordinate (b);
+		\draw[shorten <= -10pt]
+		  (aux3) --
+		  (a) --
+		  (aux1);
+		\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+		  (b) --
+		  ++(225:2.2) --
+		  ++(-45:2.2);
+	\end{scope}
+	\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+	  (aux4) --
+	  ++(225:0.8) --
+	  ++(-45:0.8);
+	\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+		\draw[shorten <= -10pt]
+		  (aux2) --
+		  ++(225:3) coordinate[pos=0.45] (c) --
+		  ++(-45:3.1);
+		\draw
+		  (aux2) --
+		  (c) --
+		  ++(135:2.5) --
+		  ++(45:2.5) --
+		  ++(-45:2.5) coordinate[pos=0.3] (d);   
+		\draw 
+		  (d) -- +(45:1);
+	\end{scope}
+\end{tikzpicture}%
+}
+
+\begin{document}
+\begin{titlepage}
+
+\noindent
+\titlefont Auto-Budget (AB)\par
+\null\vfill
+\vspace*{1cm}
+\noindent
+\hfill
+\begin{minipage}{0.35\linewidth}
+    \begin{flushright}
+        \printauthor
+    \end{flushright}
+\end{minipage}
+%
+\begin{minipage}{0.02\linewidth}
+    \rule{1pt}{20pt}
+\end{minipage}
+\titlepagedecoration
+\end{titlepage}
+
+
+
+
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Motivation}
+Ever since getting a full-time job, budgeting has become one of those "things" I have to be aware of. Using Google Sheets with a template I found online, I usually have to manually copy down all of my transactions from my bank activity; however, this is time consuming and mind-numbing. Instead, I propose a simple (likely not as simple as I am anticipating) web app built with React and a local MongoDB database (for now) to parse through a CSV of my bank activity and load it into the db in a "smart" manner. From there, depending on the route I'm on, I'll be able to display my budget for the month, look at previous monthly budgets, and see my account activity either by month, X months, year, or all time (as far back as the data allows). 
+ 
+
+\section{Technologies}
+\begin{enumerate} 
+	\item React - I will use React as the front end framework for this project
+	\begin{enumerate}
+		\item Recharts will likely be used or an alternative
+	\end{enumerate}
+	\item MongoDB - I will use MongoDB as the back-end data storage to this project
+	\item GraphQL - I will use GraphQL to query said database
+\end{enumerate} 
+
+\section{Core Features}
+\begin{enumerate}
+	\item Have a home page just showing account activity with links to budget pages
+	\item Display the activity for a given time span (including by month, month range, year, or all)
+	\item Budget pages will display account activity for the given month showing ``planned'' and ``actual'' expenses
+	\item For now, the CSV will be parsed prior to upload with a python script. The script will also incorporate NLP to aid in categorizing each of the transactions.
+	\item Add ability to create a budget for the month
+\end{enumerate}
+
+\section{Future features}
+\begin{enumerate}
+	\item Heroku CI/CD/Hosting - I will use Heroku to enable CI/CD on pushes to the master branch on github and Heroku Dynos to host our application online.
+	\item Add the ability to upload CSV through the web app
+	\item Transition the data hosting to a service instead of local
+	\item Add recommendations to the budget amounts based on previous month(s) account activity (over/under)
+\end{enumerate}	
+
+
+\section{Github Repository}
+\href{https://github.com/ericaltenburg/ab}{Here}
+
+\end{document}
+
+
+
+
+
